@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components/macro";
 import TextBox from "devextreme-react/text-box";
 import { Button } from "devextreme-react/button";
+import { LoadPanel } from "devextreme-react/load-panel";
 import { getProducts } from "../../services/searchService";
 
 const Home = (props) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [loadPanelVisible, setLoadPanelVisible] = useState(false);
 
   const searchValueChanged = (e) => {
     setSearchValue(e.value);
@@ -14,7 +16,9 @@ const Home = (props) => {
 
   const searchProduct = async (e) => {
     if (searchValue !== "") {
+      setLoadPanelVisible(true);
       const data = await getProducts(searchValue);
+      setLoadPanelVisible(false);
       setSearchResults(data.products);
     }
   };
@@ -45,6 +49,11 @@ const Home = (props) => {
 
   return (
     <React.Fragment>
+      <LoadPanel
+        shadingColor="rgba(0,0,0,0.4)"
+        visible={loadPanelVisible}
+        message="Carregando..."
+      />
       <Container>
         <SearchContainer>
           <TextBox
