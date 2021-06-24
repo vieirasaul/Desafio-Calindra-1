@@ -27,6 +27,7 @@ const Home = (props) => {
   const [searchValue, setSearchValue] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [loadPanelVisible, setLoadPanelVisible] = useState(false);
+  const [hasSearched, sethasSearched] = useState(false);
 
   const searchValueChanged = (e) => {
     setSearchValue(e.value);
@@ -45,6 +46,7 @@ const Home = (props) => {
     const data = await getProducts(e.itemData.term);
     setLoadPanelVisible(false);
     setSearchResults(data);
+    sethasSearched(true);
   };
 
   const searchProduct = async (e) => {
@@ -53,6 +55,7 @@ const Home = (props) => {
       const data = await getProducts(searchValue);
       setLoadPanelVisible(false);
       setSearchResults(data);
+      sethasSearched(true);
     }
   };
 
@@ -90,7 +93,7 @@ const Home = (props) => {
           />
         </SearchContainer>
         <StyledList>
-          {searchResults.length > 0 ? (
+          {searchResults.length > 0 || !hasSearched ? (
             productsList
           ) : (
             <p>Não foram encontrados produtos com a palavra "{searchValue}".</p>
